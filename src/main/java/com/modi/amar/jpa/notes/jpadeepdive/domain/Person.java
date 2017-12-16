@@ -2,18 +2,37 @@ package com.modi.amar.jpa.notes.jpadeepdive.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Person")
+@NamedQueries({
+	@NamedQuery(name="find_all_persons", query="Select p from Person p"), //JPQL example
+	@NamedQuery(name="find_by_id", query="Select p from Person p where p.name = :name")
+})
+
 public class Person {
 	
+	@Id
+	@GeneratedValue
 	private int id;
+	
+	@Column(name ="name")
 	private String name;
 	private String location;
 	private Date birthDate;
-	
+		
+	// Whenever you use a RowMapper with JDBC, you MUST have noArgsConstructor
 	public Person(){}
 	
-	public Person(int id, String name, String location, Date birthDate) {
+	public Person(String name, String location, Date birthDate) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.location = location;
 		this.birthDate = birthDate;
@@ -59,9 +78,11 @@ public class Person {
 		return true;
 	}
 	
+	
+	// If you generate toString(), then it can actually display your object in the console without just showing you the hashcode
 	@Override
 	public String toString() {
-		return String.format("Person [id=%s, name=%s, location=%s, birthDate=%s]", id, name, location, birthDate);
+		return String.format("\n Person [id=%s, name=%s, location=%s, birthDate=%s]", id, name, location, birthDate);
 	}
 	
 	public int getId() {
